@@ -6,7 +6,7 @@ interface Props {
 }
 
 const action = async (endpoint: string): Promise<string> => {
-    const resp = await fetch(endpoint);
+    const resp = await fetch(endpoint, {method: "POST"});
     const json = await resp.json();
     return json;
 }
