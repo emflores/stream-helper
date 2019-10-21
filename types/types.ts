@@ -1,10 +1,14 @@
+import { string } from "prop-types"
+
 export interface AppContextProps {
     socket: SocketIOClient.Socket | null;
 }
 
 export interface TileProps {
-    displayName: string;
+    type: string;
+    subType: string;
     endpoint: string;
+    title: string;
 }
 
 export interface GetTilesResp {

@@ -5,16 +5,25 @@ interface Props {
     tile: TileProps;
 }
 
-const action = async (endpoint: string): Promise<string> => {
-    const resp = await fetch(endpoint, {method: "POST"});
+const action = async (endpoint: string, subType: string): Promise<string> => {
+    const resp = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        subType: subType,
+      })
+    });
     const json = await resp.json();
     return json;
 }
 
 const Tile: React.FC<Props> = (props) => {
   return (
-    <button onClick={action.bind(null, props.tile.endpoint)}>
-        {props.tile.displayName}
+    <button onClick={action.bind(null, props.tile.endpoint, props.tile.subType)}>
+        {props.tile.title}
     </button>
   );
 }

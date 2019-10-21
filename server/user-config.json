@@ -1,0 +1,32 @@
+{
+    "tiles": [
+        {
+            "type": "SLOT_MACHINE",
+            "options": [
+                "Couldn't hear footsteps",
+                "No hit reg",
+                "FPS drop",
+                "Bad loot",
+                "Ran out of ammo",
+                "Hands are cold",
+                "Feet are cold",
+                "Tigger distracted me",
+                "Sweaty zoomers - kid lives in creative mode",
+                "Had on the wrong skin",
+                "No way I should have taken fall damage there",
+                "Bad drop"
+            ],
+            "title": "Excuse Generator",
+            "subType": "EXCUSE_GENERATOR"
+        },
+        {
+            "type": "SLOT_MACHINE",
+            "options": [
+                "Retail Row",
+                "Salty Springs"
+            ],
+            "title": "Fortnite Drop Location",
+            "subType": "FORNITE_DROP_LOCATION"
+        }
+    ]
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Router, Route, Switch } from "react-router";
 import Client from './pages/client/Client';
 import { createBrowserHistory } from "history";
-import ExcuseGenerator from './pages/plugins/excuse-generator/ExcuseGenerator';
+import SlotMachinePlugin from './pages/plugins/slot-machine/SlotMachine';
 import socketio from "socket.io-client";
 import { AppContext } from './app-context';
 
@@ -18,7 +18,7 @@ const OurRouter: React.FC = () => {
                 <Switch>
                     <Route exact path="/client" component={Client} />
 
-                    <Route exact path="/plugins/excuse-generator" component={ExcuseGenerator} />
+                    <Route exact path="/plugins/slot-machine" component={SlotMachinePlugin} />
                 </Switch>
             </Router>
         </AppContext.Provider>

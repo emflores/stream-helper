@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components'
 
 interface Props {
     options: string[];
@@ -10,10 +11,14 @@ const SlotMachine: React.FC<Props> = (props) => {
     }
 
     return (
-        <p>
+        <Paragraph>
             {props.options[0]}
-        </p>
+        </Paragraph>
     );
 }
 
 export default SlotMachine;
+
+const Paragraph = styled.p`
+    font-size: 40px;
+`;

@@ -1,6 +1,7 @@
 import React from 'react';
 import Tile from './Tile';
 import { TileProps } from '../../../types/types';
+import styled from 'styled-components'
 
 interface Props {
     tiles: TileProps[];
@@ -8,13 +9,17 @@ interface Props {
 
 const Tiles: React.FC<Props> = (props) => {
   return (
-      <ul>
+      <ListWrapper>
         {props.tiles.map((tile) => (
-            <Tile tile={tile} />
+            <Tile tile={tile} key={`${tile.type}.${tile.subType}`} />
         ))
         }
-      </ul>
+      </ListWrapper>
   );
 }
+
+const ListWrapper = styled.ul`
+  display: flex;
+`;
 
 export default Tiles;
