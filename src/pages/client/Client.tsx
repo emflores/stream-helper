@@ -14,7 +14,7 @@ const Client: React.FC = () => {
 
     useEffect(() => {
         fetchTiles().then(resp => setData({tiles: resp.tiles}))
-    });
+    }, []);
 
     return (
         <Tiles tiles={data.tiles} />

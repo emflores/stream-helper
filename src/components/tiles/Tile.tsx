@@ -21,6 +21,7 @@ const action = async (endpoint: string, subType: string): Promise<string> => {
 }
 
 const Tile: React.FC<Props> = (props) => {
+  // TODO: see what the idiomatic way binding is with FC
   return (
     <button onClick={action.bind(null, props.tile.endpoint, props.tile.subType)}>
         {props.tile.title}
