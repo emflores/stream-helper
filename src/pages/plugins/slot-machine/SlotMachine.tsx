@@ -37,18 +37,25 @@ interface ISlotMachinePluginInnter {
 }
 
 const SlotMachinePluginInner: React.FC<ISlotMachinePluginInnter> = (props) => {
-  const [data, setData] = useState<{options: string[]}>({options: []});
+  const [socketData, setSocketData] = useState<{options: string[]}>({options: []});
+  const [isVisible, setVisibility] = useState<boolean>(false);
 
   useEffect(() => {
     props.socket.on(`plugins/slot-machine/${props.subType}`, (data: SlotMachineMessage) => {
-      setData({
+      setSocketData({
         options: data.options,
       })
+
+      setVisibility(true)
+
+      setTimeout(() => {
+        setVisibility(false)
+      }, 5000)
     })
-  });
+  }, []);
 
   return (
-    <SlotMachine options={data.options} />
+    <SlotMachine options={socketData.options} isVisible={isVisible} />
   )
 }
 

@@ -3,9 +3,15 @@ import styled from 'styled-components'
 
 interface Props {
     options: string[];
+    isVisible: boolean;
 }
 
+// TODO: Figure out slot machine animation
 const SlotMachine: React.FC<Props> = (props) => {
+    if (!props.isVisible) {
+        return null;
+    }
+
     if (!props.options.length) {
         return null
     }
@@ -14,11 +20,16 @@ const SlotMachine: React.FC<Props> = (props) => {
         <Paragraph>
             {props.options[0]}
         </Paragraph>
+
     );
 }
 
 export default SlotMachine;
 
-const Paragraph = styled.p`
+const Paragraph = styled.div`
     font-size: 40px;
+    color: #772ce8;
+    font-weight: bold;
+    background-color: #fff;
+    text-align: center;
 `;
