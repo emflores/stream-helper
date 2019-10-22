@@ -5,13 +5,15 @@ import socketio from "socket.io"
 import cors from "cors";
 import userConfig from "./user-config.json"
 import bodyParser from "body-parser";
+import * as category from "./plugins/twitch/channel/category";
 
 const app = express();
 const port = 8080;
 
 const PLUGINS_URL_MAP = new Map<string, string>(
     [
-        ["SLOT_MACHINE", "/plugin/slot-machine/create"]
+        ["SLOT_MACHINE", "/plugin/slot-machine/create"],
+        ["SWITCH_CATEGORY", "/plugin/channel/category/change"]
     ]
 )
 
@@ -46,6 +48,12 @@ app.get( "/api/tiles", ( req, res ) => {
 
 app.post("/plugin/slot-machine/create", (req, res) => {
     generate(io, req.body.subType)
+
+    res.json({});
+});
+
+app.post("/plugin/channel/category/change", (req, res) => {
+    category.change(req.body.subType)
 
     res.json({});
 });

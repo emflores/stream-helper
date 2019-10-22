@@ -11,6 +11,13 @@ export interface TileProps {
     title: string;
 }
 
+export interface SlotMachineConfigProps {
+    type: string;
+    subType: string;
+    title: string;
+    options: string[];
+}
+
 export interface GetTilesResp {
     tiles: TileProps[];
 }

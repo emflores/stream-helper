@@ -1,15 +1,17 @@
 import socketio from "socket.io";
 import userConfig from "../../user-config.json";
+import { SlotMachineConfigProps } from "../../../types/types.js";
 
 export const generate = (io: socketio.Server, subType: string) => {
-    const tile = userConfig.tiles.find((tile) => tile.subType === subType);
+    const tile = userConfig.tiles.find((tile) => tile.type === "SLOT_MACHINE" && tile.subType === subType);
 
     if (!tile) {
         // TODO: handle this
         return
     }
 
-    const shuffled = shuffleOptions(tile.options);
+    // TODO: figure out if there is a better way to do this type assertion
+    const shuffled = shuffleOptions((tile as SlotMachineConfigProps).options);
 
     // TODO: figure out how to share these constants with the client
     io.sockets.emit(`plugins/slot-machine/${tile.subType}`, {

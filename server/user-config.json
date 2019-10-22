@@ -1,4 +1,5 @@
 {
+    "channelId": "264051522",
     "tiles": [
         {
             "type": "SLOT_MACHINE",
@@ -36,6 +37,20 @@
             ],
             "title": "Fortnite Drop Location",
             "subType": "FORNITE_DROP_LOCATION"
+        },
+        {
+            "type": "SWITCH_CATEGORY",
+            "category": "Fortnite",
+            "title": "Fortnite",
+            "streamTitle": "Twitch Engineer Gets Zoomered",
+            "subType": "FORTNITE"
+        },
+        {
+            "type": "SWITCH_CATEGORY",
+            "category": "Science & Technology",
+            "title": "Science & Tech",
+            "streamTitle": "Twitch Engineer Creates a Stream Companion",
+            "subType": "SCIENCE_TECH"
         }
     ]
 }
