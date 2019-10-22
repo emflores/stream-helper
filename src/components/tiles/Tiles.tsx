@@ -9,17 +9,32 @@ interface Props {
 
 const Tiles: React.FC<Props> = (props) => {
   return (
-      <ListWrapper>
+      <List>
         {props.tiles.map((tile) => (
-            <Tile tile={tile} key={`${tile.type}.${tile.subType}`} />
+          <ListItem key={`${tile.type}.${tile.subType}`}>
+            <Tile tile={tile} />
+          </ListItem>
         ))
         }
-      </ListWrapper>
+      </List>
   );
 }
 
-const ListWrapper = styled.ul`
+const List = styled.ul`
   display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 25px;
+`;
+
+const ListItem = styled.li`
+  display: flex;
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  margin-right: 10px;
+  overflow: hidden;
+  background-color: #fff;
 `;
 
 export default Tiles;

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useCallback} from 'react';
 import {TileProps} from "../../../types/types";
+import styled from 'styled-components'
 
 interface Props {
     tile: TileProps;
@@ -16,17 +17,61 @@ const action = async (endpoint: string, subType: string): Promise<string> => {
         subType: subType,
       })
     });
+
+
+
     const json = await resp.json();
     return json;
 }
 
 const Tile: React.FC<Props> = (props) => {
+  const [requestState, setRequestState] = useState<{
+    isSending: boolean;
+    error: boolean;
+  }>({ isSending: false, error: false});
+
+  const sendRequest = useCallback(async () => {
+    try {
+      await action(props.tile.endpoint, props.tile.subType)
+    } catch(e) {
+      setRequestState({
+        isSending: false,
+        error: true
+      });
+    }
+
+    setRequestState({
+      isSending: false,
+      error: false
+    });
+
+  }, [])
+
   // TODO: see what the idiomatic way binding is with FC
   return (
-    <button onClick={action.bind(null, props.tile.endpoint, props.tile.subType)}>
+    <Button onClick={sendRequest} error={requestState.error}>
         {props.tile.title}
-    </button>
+    </Button>
   );
 }
+
+const Button = styled.button<{error: boolean}>`
+  height: 100%;
+  width: 100%;
+  background: none;
+  outline: none;
+  border: none;
+  color: ${props => props.error ? "#bb0000" : "#000"};
+  font-weight: bold;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active {
+    color: #fff;
+    background-color: #4bb543;
+  }
+`;
 
 export default Tile;

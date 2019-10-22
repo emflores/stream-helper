@@ -32,4 +32,5 @@ const Paragraph = styled.div`
     font-weight: bold;
     background-color: #fff;
     text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
 `;

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Tiles from '../../components/tiles/Tiles';
 import { GetTilesResp } from '../../../types/types';
+import styled from 'styled-components';
 
 const fetchTiles = async (): Promise<GetTilesResp> => {
     const result = await fetch('/api/tiles');
@@ -17,8 +18,16 @@ const Client: React.FC = () => {
     }, []);
 
     return (
-        <Tiles tiles={data.tiles} />
+        <Backdrop>
+            <Tiles tiles={data.tiles} />
+        </Backdrop>
     );
 }
+
+const Backdrop = styled.div`
+    background-color: #772ce8;
+    height: 100%;
+    width: 100%;
+`;
 
 export default Client;
