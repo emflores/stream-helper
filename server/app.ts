@@ -6,14 +6,18 @@ import cors from "cors";
 import userConfig from "./user-config.json"
 import bodyParser from "body-parser";
 import * as category from "./plugins/twitch/channel/category";
+import * as slobs from "./plugins/slobs/slobs";
+import SockJS from "sockjs-client";
 
 const app = express();
 const port = 8080;
+const slobsHost = "http://127.0.0.1:59650/api";
 
 const PLUGINS_URL_MAP = new Map<string, string>(
     [
         ["SLOT_MACHINE", "/plugin/slot-machine/create"],
-        ["SWITCH_CATEGORY", "/plugin/channel/category/change"]
+        ["SWITCH_CATEGORY", "/plugin/channel/category/change"],
+        ["CHANGE_SCENE", "/plugin/scene/change"]
     ]
 )
 
@@ -31,10 +35,21 @@ const io = socketio.listen(httpServer, {
     origins: "*:*"
 });
 
+// sockjs client for SLOBS
+const sockjsClient = new SockJS(slobsHost);
+const slobsReady = slobs.init(sockjsClient);
+
 httpServer.listen(port);
 
-app.get( "/api/tiles", ( req, res ) => {
-    const tiles = userConfig.tiles.map(tilesConfig => {
+app.get( "/api/tiles", async ( req, res ) => {
+    await Promise.all([slobsReady])
+
+    const allTiles = [
+        ...userConfig.tiles,
+        ...slobs.getTiles()
+    ];
+
+    const tiles = allTiles.map(tilesConfig => {
         return {
             ...tilesConfig,
             endpoint: PLUGINS_URL_MAP.get(tilesConfig.type)
@@ -54,6 +69,12 @@ app.post("/plugin/slot-machine/create", (req, res) => {
 
 app.post("/plugin/channel/category/change", (req, res) => {
     category.change(req.body.subType)
+
+    res.json({});
+});
+
+app.post("/plugin/scene/change", (req, res) => {
+    console.log("changing scene")
 
     res.json({});
 });

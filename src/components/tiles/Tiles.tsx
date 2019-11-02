@@ -24,7 +24,7 @@ const Tiles: React.FC<Props> = (props) => {
           <h2>{key}</h2>
           <List>
             {tiles.map(tile => (
-              <ListItem key={`${tile.type}.${tile.subType}`}>
+              <ListItem selected={tile.selected} key={`${tile.type}.${tile.subType}`}>
                 <Tile tile={tile} />
               </ListItem>
             ))}
@@ -47,7 +47,7 @@ const List = styled.ul`
   padding: 0;
 `;
 
-const ListItem = styled.li`
+const ListItem = styled.li<{selected?: boolean}>`
   display: flex;
   width: 100px;
   height: 100px;
@@ -55,6 +55,7 @@ const ListItem = styled.li`
   margin-right: 10px;
   overflow: hidden;
   background-color: #fff;
+  border: ${props => props.selected && "solid 3px #000"};
 `;
 
 export default Tiles;

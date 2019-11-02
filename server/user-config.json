@@ -24,7 +24,9 @@
                 "4v1",
                 "Bad teammates",
                 "Mic issues",
-                "Wife distracted me"
+                "Wife distracted me",
+                "Campers",
+                "I was alt-tabbed"
             ],
             "title": "Excuse Generator",
             "subType": "EXCUSE_GENERATOR"
@@ -49,8 +51,15 @@
             "type": "SWITCH_CATEGORY",
             "category": "Science & Technology",
             "title": "Science & Tech",
-            "streamTitle": "Twitch Engineer Creates a Stream Companion",
+            "streamTitle": "Twitch Engineer Writes a Stream Companion App and Gives Career Advice",
             "subType": "SCIENCE_TECH"
+        },
+        {
+            "type": "SWITCH_CATEGORY",
+            "category": "Call of Duty: Modern Warfare",
+            "title": "Call of Duty: Modern Warfare",
+            "streamTitle": "Twitch Engineer Clicks Heads and Doesn't Get Tilted :)",
+            "subType": "COD"
         }
     ]
 }

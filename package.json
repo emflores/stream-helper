@@ -65,6 +65,7 @@
     "semver": "6.3.0",
     "socket.io": "^2.3.0",
     "socket.io-client": "^2.3.0",
+    "sockjs-client": "^1.4.0",
     "style-loader": "1.0.0",
     "styled-components": "^4.4.0",
     "terser-webpack-plugin": "1.4.1",
@@ -105,6 +106,7 @@
     "@types/react-router": "^5.1.2",
     "@types/socket.io": "^2.1.4",
     "@types/socket.io-client": "^1.4.32",
+    "@types/sockjs-client": "^1.1.1",
     "@types/styled-components": "^4.1.19",
     "ts-node": "^8.4.1"
   },

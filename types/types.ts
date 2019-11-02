@@ -4,17 +4,19 @@ export interface AppContextProps {
     socket: SocketIOClient.Socket | null;
 }
 
-export interface TileProps {
-    type: string;
-    subType: string;
+export interface TileProps extends TileStaticProps {
     endpoint: string;
-    title: string;
+
 }
 
-export interface SlotMachineConfigProps {
+export interface TileStaticProps {
+    title: string;
+    selected: boolean;
     type: string;
     subType: string;
-    title: string;
+}
+
+export interface SlotMachineConfigProps extends TileStaticProps {
     options: string[];
 }
 
