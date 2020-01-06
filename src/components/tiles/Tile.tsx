@@ -18,8 +18,6 @@ const action = async (endpoint: string, subType: string): Promise<string> => {
       })
     });
 
-
-
     const json = await resp.json();
     return json;
 }
@@ -45,24 +43,24 @@ const Tile: React.FC<Props> = (props) => {
       error: false
     });
 
-  }, [])
+  }, [props]);
 
   // TODO: see what the idiomatic way binding is with FC
   return (
-    <Button onClick={sendRequest} error={requestState.error}>
+    <Button onClick={sendRequest} error={requestState.error} selected={props.tile.selected}>
         {props.tile.title}
     </Button>
   );
 }
 
-const Button = styled.button<{error: boolean}>`
+const Button = styled.button<{error: boolean; selected: boolean;}>`
   height: 100%;
   width: 100%;
   background: none;
   outline: none;
-  border: none;
   color: ${props => props.error ? "#bb0000" : "#000"};
   font-weight: bold;
+  border: ${props => props.selected ? "solid 1px black" : "solid 1px red"};
 
   &:hover {
     cursor: pointer;

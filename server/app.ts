@@ -17,7 +17,8 @@ const PLUGINS_URL_MAP = new Map<string, string>(
     [
         ["SLOT_MACHINE", "/plugin/slot-machine/create"],
         ["SWITCH_CATEGORY", "/plugin/channel/category/change"],
-        ["CHANGE_SCENE", "/plugin/scene/change"]
+        ["CHANGE_SCENE", "/plugin/scene/change"],
+        ["AUDIO_SOURCE", "/plugin/audio-source/mute"]
     ]
 )
 
@@ -73,8 +74,38 @@ app.post("/plugin/channel/category/change", (req, res) => {
     res.json({});
 });
 
-app.post("/plugin/scene/change", (req, res) => {
-    console.log("changing scene")
+app.post("/plugin/scene/change", async (req, res) => {
+    await Promise.all([slobsReady])
+
+    try {
+        await slobs.setScene(sockjsClient, req.body.subType);
+    } catch(e) {
+        console.log(e)
+
+        res.status(500).send({
+            message: "failed to change scene, sucks"
+        })
+
+        return;
+    }
+
+    res.json({});
+});
+
+app.post("/plugin/audio-source/mute", async (req, res) => {
+    await Promise.all([slobsReady])
+
+    try {
+        await slobs.setMuted(sockjsClient, req.body.subType);
+    } catch(e) {
+        console.log(e)
+
+        res.status(500).send({
+            message: "failed to mute audio source, sucks"
+        })
+
+        return;
+    }
 
     res.json({});
 });

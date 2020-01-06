@@ -1,5 +1,8 @@
 import { TileStaticProps } from "../../../types/types";
 
+// TODO: Break this out to smaller modules
+// TODO: Import type defs from slobs e.g. https://github.com/stream-labs/streamlabs-obs/blob/eb702709/app/services/api/external-api/audio/audio.ts#L20
+
 type Message = {
     id: number;
     [key: string]: any;
@@ -27,20 +30,18 @@ type GetScenesResponse = {
     name: string;
 }
 
+type GetAudioResourcesResponse = {
+    _type: string;
+    sourceId: string;
+    resourceId: string;
+    name: string;
+    muted: boolean;
+}
+
 let tileCache: TileStaticProps[] = [];
 let obsReady: Promise<void>;
 let requestCount = 0;
 let requestCache: {[key: number]: RequestCache} = {};
-
-
-const makeSlobsRequest = (resource: string, methodName: string): {} => {
-    return {
-        jsonrpc: '2.0',
-        id: ++requestCount,
-        method: methodName,
-        params: { resource }
-    }
-}
 
 const sendMessage = (sock: WebSocket, message: Message): Promise<{}> => {
     return new Promise((resolve, reject) => {
@@ -55,32 +56,48 @@ const sendMessage = (sock: WebSocket, message: Message): Promise<{}> => {
     })
 }
 
-const getScenes = (sock: WebSocket): Promise<RPCResult> => {
+const makeRequest = (sock: WebSocket, method: string, resource: string): Promise<RPCResult> => {
     return sendMessage(sock, {
         jsonrpc: '2.0',
         id: ++requestCount,
-        method: "getScenes",
+        method,
         params: {
-            resource: "ScenesService"
+            resource,
         }
     })
 }
 
 const scenesToTiles = (scenes: GetScenesResponse[]): TileStaticProps[] => {
-    return scenes.map(scene => ({
-        type: "CHANGE_SCENE",
-        title: scene.name,
-        selected: false, // TODO: call getItems for scenes to get visibility
-        subType: "",
-    }));
+    return scenes.map(scene => {
+        return {
+            type: "CHANGE_SCENE",
+            title: scene.name,
+            selected: false, // TODO: call getItems for scenes to get visibility
+            subType: scene.id,
+        };
+    });
+}
+
+const audioSourcesToTiles = (audioSources: GetAudioResourcesResponse[]): TileStaticProps[] => {
+    return audioSources.map(audioSource => {
+        console.log(audioSource)
+        return {
+            type: "AUDIO_SOURCE",
+            title: audioSource.name,
+            selected: !audioSource.muted,
+            subType: audioSource.resourceId,
+        };
+    });
 }
 
 const onOpen = (sock: WebSocket, resolve: (value: void) => void) => {
-    const scenesPromise = getScenes(sock);
+    const scenesPromise = makeRequest(sock, "getScenes", "ScenesService");
+    const audioSources = makeRequest(sock, "getSources", "AudioService");
 
-    Promise.all([scenesPromise]).then(([scenesResult]) => {
+    Promise.all([scenesPromise, audioSources]).then(([scenesResult, audioSourcesResult]) => {
         tileCache = [
-            ...scenesToTiles(scenesResult as GetScenesResponse[])
+            ...audioSourcesToTiles(audioSourcesResult as GetAudioResourcesResponse[]),
+            ...scenesToTiles(scenesResult as GetScenesResponse[]),
         ]
         resolve()
     })
@@ -115,9 +132,46 @@ export const init = async (sock: WebSocket): Promise<void> => {
         sock.onerror = console.error
     })
 
-    return obsReady
+    return obsReady;
 }
 
+// TODO: we only update tile state when the web server starts. we need to push state changes to the client side
+//       consistently. Either:
+//          * optimistic updates
+//          * refresh tile state via websockets (just re-render everything any time any state changes)
 export const getTiles = (): TileStaticProps[] => {
     return tileCache;
 }
+
+export const setScene = async (sock: WebSocket, id: string) => {
+    const resp = await sendMessage(sock, {
+        jsonrpc: '2.0',
+        id: ++requestCount,
+        method: "makeSceneActive",
+        params: {
+            resource: "ScenesService",
+            args: [id]
+        }
+    });
+
+    if (!resp) {
+        throw new Error("failed to change scene")
+    }
+};
+
+export const setMuted = async (sock: WebSocket, id: string) => {
+    const resp = await sendMessage(sock, {
+        jsonrpc: '2.0',
+        id: ++requestCount,
+        method: "setMuted",
+        params: {
+            resource: id,
+            // TODO: pass and reverse state from front end
+            args: [true]
+        }
+    });
+
+    if (!resp) {
+        throw new Error("failed to mute source")
+    }
+};
